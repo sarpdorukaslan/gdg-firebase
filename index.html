@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "sizinapikeyiniz",
+        authDomain: "sizinprojeadiniz.firebaseapp.com",
+        databaseURL: "https://sizinprojeadiniz.firebaseio.com",
+        storageBucket: "sizinprojeadiniz.appspot.com",
+        messagingSenderId: "sizingondericiidniz"
+    };
+    firebase.initializeApp(config);
+        function writeUserDataToTable(data)
+        {
+            $("#list").append('<tr><td>'+data.val().name+'</td><td>'+data.val().surname+'</td></tr>')
+        }
+        var commentsRef = firebase.database().ref('users/');
+        commentsRef.on('child_added', function(data) {
+            writeUserDataToTable(data)
+        });
+        function writeUserData() {
+            var newPostKey = firebase.database().ref().child('posts').push().key;
+            name = document.getElementById('name').value;
+            surname = document.getElementById('surname').value;
+            firebase.database().ref('users/'+newPostKey).set({
+                name: name,
+                surname: surname,
+                });
+            return false;
+        }
+        writeUserData(5,"Resul ASLAN","resulaslan@gmail.com")
+    </script>
+</head>
+<body>
+    <form name="firebase">
+        İsim : <input type="text" name="name" id="name"><br>
+        Soyisim : <input type="text" name="surname" id="surname"><br>
+        Email : <input type="text" name="email" id="email"><br>
+        <input type="submit" onclick="writeUserData();return false;">
+    </form>
+    <table id="list">
+        <tr>
+            <td>İsim</td>
+            <td>Soyisim</td>
+
+        </tr>
+    </table>
+</body>
+</html>
